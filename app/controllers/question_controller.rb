@@ -13,8 +13,7 @@ class QuestionController < ApplicationController
     #   task_id:  'id задачи (передано ранее)'
     # }
     # Net::HTTP.post_form(uri, parameters)
-    binding.pry
-
+    p params
   end
 
   def test
