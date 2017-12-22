@@ -4,19 +4,32 @@ class QuestionController < ApplicationController
   end
 
   def quiz
-    # @respond = params.permit(:question, :id, :level)
+    respond = params.permit(:question, :id, :level)
+    question = respond[:question]
+    id = respond[:id]
+    level = respond[:level]
+
     head :ok
-    # uri = URI("http://0.0.0.0:3000")
-    # parameters = {
-    #   answer: 'ваш ответ',
-    #   token: 'API_KEY (см. процесс регистрации)',
-    #   task_id:  'id задачи (передано ранее)'
-    # }
-    # Net::HTTP.post_form(uri, parameters)
-    p params
+
+    case level
+    when 1
+      answer = $level1_poems[question]
+    else
+      puts 'NEXT LEVEL'
+    end
+
+    uri = URI("http://pushkin.rubyroidlabs.com/quiz")
+    parameters = {
+      answer: answer,
+      token: '0a8edbd1281c62f12dd27590298a25d8',
+      task_id:  id
+    }
+    Net::HTTP.post_form(uri, parameters)
+    puts '=' * 40
+    puts 'Question: ' + question
+    puts 'Answer: ' + answer
+    puts '=' * 40
+
   end
 
-  def test
-    binding.pry
-  end
 end
