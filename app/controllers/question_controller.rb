@@ -24,11 +24,16 @@ class QuestionController < ApplicationController
       token: '0a8edbd1281c62f12dd27590298a25d8',
       task_id:  id
     }
-    Net::HTTP.post_form(uri, parameters)
-    puts '=' * 40
-    puts 'Question: ' + question
-    puts 'Answer: ' + answer
-    puts '=' * 40
+    # Net::HTTP.post_form(uri, parameters)
+
+    unless answer
+      File.open('./log/question.log', 'a') do |file|
+        file.puts 'Question: ' + question
+        file.puts 'Level: ' + level
+        file.puts '=' * 40
+        file.puts
+      end
+    end
 
   end
 
