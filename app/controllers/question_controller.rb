@@ -13,7 +13,7 @@ class QuestionController < ApplicationController
 
     case level
     when 1
-      answer = $level1_poems[question]
+      answer = $level1_poems[question.gsub(' ', '').strip]
     else
       puts 'NEXT LEVEL'
     end
@@ -33,6 +33,7 @@ class QuestionController < ApplicationController
         file.puts '=' * 40
         file.puts
       end
+      binding.pry
     end
 
   end
