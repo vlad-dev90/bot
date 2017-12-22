@@ -29,7 +29,7 @@ class QuestionController < ApplicationController
     unless answer
       File.open('./log/question.log', 'a') do |file|
         file.puts 'Question: ' + question
-        file.puts 'Level: ' + level
+        file.puts 'Level: ' + level.to_i
         file.puts '=' * 40
         file.puts
       end
