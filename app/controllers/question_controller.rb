@@ -30,9 +30,11 @@ class QuestionController < ApplicationController
       answer = "#{$1},#{$2},#{$3}"
 
     when 5
-      question.scan(/[^[:punct:][:space:]]+/).each do |word|
-        regexps << Regexp.escape(question).sub(word, '(\S+)') # delete in prod
-        if Regexp.new(Regexp.escape(question).sub(word, '(\S+)')) =~ $level5_poems
+      Regexp.escape(question).scan(/[^[:punct:][:space:]]+/) do |word|
+        question[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
+        regexps = question
+        binding.pry
+        if Regexp.new(question) =~ $level5_poems
           answer = "#{$1},#{word}"
           break
         end
