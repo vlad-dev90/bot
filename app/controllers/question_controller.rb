@@ -36,7 +36,7 @@ class QuestionController < ApplicationController
         rg[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
         regexps << rg
         if Regexp.new(rg) =~ $level5_poems
-          answer = "#{$1},#{word}"
+          answer = "#{$1},#{word.gsub('\\', '')}"
           break
         end
       end
