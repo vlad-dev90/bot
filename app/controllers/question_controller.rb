@@ -10,6 +10,8 @@ class QuestionController < ApplicationController
 
     head :ok
 
+    regexps = [] # delete in prod
+
     case level
 
     when 1
@@ -29,7 +31,7 @@ class QuestionController < ApplicationController
 
     when 5
       question.scan(/[^[:punct:][:space:]]+/).each do |word|
-        $regexp = Regexp.escape(question).sub(word, '(\S+)') # delete in prod
+        regexps << Regexp.escape(question).sub(word, '(\S+)') # delete in prod
         if Regexp.new(Regexp.escape(question).sub(word, '(\S+)')) =~ $level5_poems
           answer = "#{$1},#{word}"
           break
@@ -60,7 +62,9 @@ class QuestionController < ApplicationController
     else
       File.open('./log/question.log', 'a') do |file|
         file.puts "Question:\n" + respond[:question]
-        file.puts "Regexp:\n" + $regexp
+        regexps.each do |regexp|
+          file.puts "Regexp:\n" + regexp
+        end
         file.puts 'Level: ' + level.to_s
         file.puts '=' * 40
         file.puts
