@@ -4,7 +4,7 @@ class QuestionController < ApplicationController
 
   def quiz
     respond = params.permit(:question, :id, :level)
-    question = respond[:question].gsub(' ', '').strip
+    question = respond[:question] # .gsub(' ', '').strip
     id = respond[:id]
     level = respond[:level]
 
@@ -48,7 +48,7 @@ class QuestionController < ApplicationController
 
     if answer
       puts '=' * 40
-      puts "Question:\n#{question}"
+      puts "Question:\n#{respond[:question]}"
       puts "Answer:\n#{answer}"
     else
       File.open('./log/question.log', 'a') do |file|
