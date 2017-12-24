@@ -1,6 +1,5 @@
 class QuestionController < ApplicationController
   def index
-    binding.pry
   end
 
   def quiz
@@ -24,6 +23,13 @@ class QuestionController < ApplicationController
       Regexp.new(Regexp.escape(question).gsub('%WORD%', '(\S+)')) =~ $level2_poems
       answer = "#{$1},#{$2}"
 
+    when 4
+      Regexp.new(Regexp.escape(question).gsub('%WORD%', '(\S+)')) =~ $level2_poems
+      answer = "#{$1},#{$2},#{$3}"
+
+    # when 5
+
+
     else
       puts 'NEXT LEVEL'
     end
@@ -36,16 +42,22 @@ class QuestionController < ApplicationController
     }
 
     # Net::HTTP.post_form(uri, parameters)
-    binding.pry
+    # binding.pry
 
-    unless answer
+    $contest_tasks << {question: question, answer: answer, level: level}
+
+    if answer
+      puts '=' * 40
+      puts "Question:\n#{question}"
+      puts "Answer:\n#{answer}"
+      puts answer
+    else
       File.open('./log/question.log', 'a') do |file|
         file.puts 'Question: ' + question
         file.puts 'Level: ' + level.to_s
         file.puts '=' * 40
         file.puts
       end
-      binding.pry
     end
 
   end

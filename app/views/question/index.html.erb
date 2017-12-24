@@ -1,0 +1,16 @@
+<table width="100%" cellspacing="2" cellpadding="0" border="0" align="center" bgcolor="#ff6600">
+  <tr bgcolor="#ffffff">
+    <th width="25%" height="67">Index</th>
+    <th width="25%" >Question</th>
+    <th width="25%" >Answer</th>
+    <th width="25%" >Level</th>
+  </tr>
+  <% $contest_tasks.each_with_index do |task, i| %>
+    <tr  bgcolor="#ffffff">
+      <td style="text-align:center;" height="67"><%= i+1 %></td>
+      <td><%= task[:question] %></td>
+      <td style="text-align:center;"><%= task[:answer] %></td>
+      <td style="text-align:center;"><%= task[:level] %></td>
+    </tr>
+  <% end %>
+</table>
