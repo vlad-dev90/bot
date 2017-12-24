@@ -20,6 +20,10 @@ class QuestionController < ApplicationController
       Regexp.new(Regexp.escape(question).sub('%WORD%', '(\S+)')) =~ $level2_poems
       answer = $1
 
+    when 3
+      Regexp.new(Regexp.escape(question).gsub('%WORD%', '(\S+)')) =~ $level2_poems
+      answer = "#{$1},#{$2}"
+
     else
       puts 'NEXT LEVEL'
     end
@@ -31,8 +35,8 @@ class QuestionController < ApplicationController
       task_id:  id
     }
 
-    Net::HTTP.post_form(uri, parameters)
-    # binding.pry
+    # Net::HTTP.post_form(uri, parameters)
+    binding.pry
 
     unless answer
       File.open('./log/question.log', 'a') do |file|
