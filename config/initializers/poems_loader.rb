@@ -15,3 +15,10 @@ poems.each do |poem|
     $level2_poems << line + "\n"
   end
 end
+
+$level5_poems = ''
+poems.each do |poem|
+  poem[1].each do |line|
+    $level5_poems << line.strip.gsub(/[[:punct:]]\z/, '') + "\n"
+  end
+end

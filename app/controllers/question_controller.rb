@@ -27,7 +27,13 @@ class QuestionController < ApplicationController
       Regexp.new(Regexp.escape(question).gsub('%WORD%', '(\S+)')) =~ $level2_poems
       answer = "#{$1},#{$2},#{$3}"
 
-    # when 5
+    when 5
+      question.scan(/[^[:punct:][:space:]]+/).each do |word|
+        if Regexp.new(Regexp.escape(question).sub(word, '(\S+)')) =~ $level5_poems
+          answer = "#{$1},#{word}"
+          break
+        end
+      end
 
 
     else
