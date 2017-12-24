@@ -30,7 +30,7 @@ class QuestionController < ApplicationController
       answer = "#{$1},#{$2},#{$3}"
 
     when 5
-      question = Regexp.escape(question.strip)
+      question = Regexp.escape(question.gsub(' ','').strip)
       question.scan(/[^[,—][:space:]]+/) do |word|
         rg = question.clone
         rg[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
