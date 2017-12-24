@@ -31,7 +31,7 @@ class QuestionController < ApplicationController
 
     when 5
       question = Regexp.escape(question)
-      question.scan(/[^[:punct:][:space:]]+/) do |word|
+      question.scan(/[^[,—][:space:]]+/) do |word|
         rg = question.clone
         rg[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
         regexps << rg
