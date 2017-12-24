@@ -44,16 +44,15 @@ class QuestionController < ApplicationController
     # Net::HTTP.post_form(uri, parameters)
     # binding.pry
 
-    $contest_tasks << {question: question, answer: answer, level: level}
+    $contest_tasks << {question: respond[:question], answer: answer, level: level}
 
     if answer
       puts '=' * 40
       puts "Question:\n#{question}"
       puts "Answer:\n#{answer}"
-      puts answer
     else
       File.open('./log/question.log', 'a') do |file|
-        file.puts 'Question: ' + question
+        file.puts 'Question: ' + respond[:question]
         file.puts 'Level: ' + level.to_s
         file.puts '=' * 40
         file.puts
