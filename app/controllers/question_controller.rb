@@ -34,7 +34,7 @@ class QuestionController < ApplicationController
       question.scan(/[^[:punct:][:space:]]+/) do |word|
         rg = question.clone
         rg[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
-        regexps = rg
+        regexps << rg
         if Regexp.new(rg) =~ $level5_poems
           answer = "#{$1},#{word}"
           break
