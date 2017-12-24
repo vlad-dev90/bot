@@ -33,7 +33,6 @@ class QuestionController < ApplicationController
       Regexp.escape(question).scan(/[^[:punct:][:space:]]+/) do |word|
         question[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
         regexps = question
-        binding.pry
         if Regexp.new(question) =~ $level5_poems
           answer = "#{$1},#{word}"
           break
