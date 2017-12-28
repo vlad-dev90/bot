@@ -53,18 +53,17 @@ class QuestionController < ApplicationController
       answer = $level6_poems[identifier]
 
     when 8
-      identifier = question.gsub(/[\t ]/, '').chars
+      identifier = question.chars
       $level8_poems[identifier.size].each_pair do |line_id, line|
         diff_size = (identifier - line_id | line_id - identifier).size
         if (diff_size <= 2)
           answer = line
+          break
         end
       end
 
 
 
-    else
-      puts 'NEXT LEVEL'
     end
 
     uri = URI("http://pushkin.rubyroidlabs.com/quiz")
