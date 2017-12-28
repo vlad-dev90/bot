@@ -4,7 +4,7 @@ class QuestionController < ApplicationController
 
   def quiz
     respond = params.permit(:question, :id, :level)
-    question = respond[:question] # .gsub(' ', '').strip
+    question = respond[:question]
     id = respond[:id]
     level = respond[:level]
 
@@ -15,7 +15,7 @@ class QuestionController < ApplicationController
     case level
 
     when 1
-      answer = $level1_poems[question]
+      answer = $level1_poems[question.gsub(/[\t ]/, '').strip]
 
     when 2
       Regexp.new(Regexp.escape(question).sub('%WORD%', '(\S+)')) =~ $level2_poems
@@ -41,6 +41,27 @@ class QuestionController < ApplicationController
         end
       end
 
+    when 6,7
+      identifier = {}
+      question.gsub(/[\t ]/, '').chars.each do |c|
+         if identifier[c]
+           identifier[c] += 1
+         else
+           identifier[c] = 1
+         end
+      end
+      answer = $level6_poems[identifier]
+
+    when 8
+      identifier = question.gsub(/[\t ]/, '').chars
+      $level8_poems[identifier.size].each_pair do |line_id, line|
+        diff_size = (identifier - line_id | line_id - identifier).size
+        if (diff_size <= 2)
+          answer = line
+        end
+      end
+
+
 
     else
       puts 'NEXT LEVEL'
@@ -53,7 +74,7 @@ class QuestionController < ApplicationController
       task_id:  id
     }
 
-    # Net::HTTP.post_form(uri, parameters)
+    Net::HTTP.post_form(uri, parameters)
     # binding.pry
 
     $contest_tasks << {question: respond[:question], answer: answer, level: level}

@@ -1,12 +1,12 @@
 require 'json'
+require 'benchmark'
 
-poems = JSON.parse(File.open('./db/poems.json').read)
-level1_poems = {}
-poems.each do |poem|
-  poem[1].each do |string|
-    level1_poems[string.strip.gsub(/[[:punct:]]\z/, '')] = poem[0]
-  end
+fh = {'а' => 2, 'б' => 1 }.to_a
+sh = {'а' => 1, 'б' => 2 }.to_a
+fs = 'ааб'.chars
+ss = 'абб'.chars
+
+Benchmark.bmbm do |x|
+  x.report("array with numbers") { 30000.times { fh - sh } }
+  x.report("array with letters")  { 30000.times { fs - ss } }
 end
-binding.pry
-p 's'
-
