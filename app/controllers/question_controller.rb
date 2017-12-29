@@ -10,7 +10,6 @@ class QuestionController < ApplicationController
 
     head :ok
 
-    regexps = [] # delete in prod
 
     case level
 
@@ -18,38 +17,36 @@ class QuestionController < ApplicationController
       answer = $level1_poems[question.gsub(/[\t ]/, '').strip]
 
     when 2
-      Regexp.new(Regexp.escape(question).sub('%WORD%', '(\S+)')) =~ $level2_poems
-      answer = $1
+      answer = $level2_poems_2[question]
+
 
     when 3
-      Regexp.new(Regexp.escape(question).gsub('%WORD%', '(\S+)')) =~ $level2_poems
-      answer = "#{$1},#{$2}"
+      splited_question = question.split("\n")
+      # answer = "#{$level3_poems[splited_question[0]]},#{$level3_poems[splited_question[1]]}"
+      answer =  $level3_poems[splited_question[0]] && $level3_poems[splited_question[1]]
+
 
     when 4
-      Regexp.new(Regexp.escape(question).gsub('%WORD%', '(\S+)')) =~ $level2_poems
-      answer = "#{$1},#{$2},#{$3}"
+      splited_question = question.split("\n")
+      # answer = "#{$level3_poems[splited_question[0]]},#{$level3_poems[splited_question[1]]},#{$level3_poems[splited_question[2]]}"
+      answer =  $level3_poems[splited_question[0]] && $level3_poems[splited_question[1]] && $level3_poems[splited_question[2]]
 
     when 5
-      question = Regexp.escape(question.gsub(' ','').strip)
-      question.scan(/[^[,—][:space:]]+/) do |word|
-        rg = question.clone
-        rg[$~.offset(0)[0]...$~.offset(0)[1]] = '(\S+)'
-        regexps << rg
-        if Regexp.new(rg) =~ $level5_poems
-          answer = "#{$1},#{word.gsub('\\', '')}"
-          break
-        end
+      question.gsub!(/[\t ]/, '')
+      question.strip!
+      length = question.size
+      s = nil
+      e = 0
+      question.scan(/,? /) do
+        e = $~.offset(0)[0]
+        start = s ? question[0..s] : ''
+        break if answer = $level5_poems["#{start}%WORD%#{question[e..length]}"]
+        s = $~.offset(0)[1] - 1
       end
+      answer ||= $level5_poems["#{question[0..e]}%WORD%"]
 
     when 6,7
-      identifier = {}
-      question.gsub(/[\t ]/, '').chars.each do |c|
-         if identifier[c]
-           identifier[c] += 1
-         else
-           identifier[c] = 1
-         end
-      end
+      identifier = question.chars.sort.join
       answer = $level6_poems[identifier]
 
     when 8
@@ -82,16 +79,6 @@ class QuestionController < ApplicationController
       puts '=' * 40
       puts "Question:\n#{respond[:question]}"
       puts "Answer:\n#{answer}"
-    else
-      File.open('./log/question.log', 'a') do |file|
-        file.puts "Question:\n" + respond[:question]
-        regexps.each do |regexp|
-          file.puts "Regexp:\n" + regexp
-        end
-        file.puts 'Level: ' + level.to_s
-        file.puts '=' * 40
-        file.puts
-      end
     end
 
   end
