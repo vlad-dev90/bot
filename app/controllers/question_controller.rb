@@ -33,16 +33,23 @@ class QuestionController < ApplicationController
     when 5
       question.gsub!(/[\t ]/, '')
       question.strip!
-      length = question.size
-      s = nil
-      e = 0
+      s = 0
       question.scan(/,? /) do
         e = $~.offset(0)[0]
-        start = s ? question[0..s] : ''
-        break if answer = $level5_poems["#{start}%WORD%#{question[e..length]}"]
-        s = $~.offset(0)[1] - 1
+        key = question.clone
+        key[s...e] = '%WORD%'
+        if answer = $level5_poems[key]
+          answer << ",#{question[s...e]}"
+          break
+        end
+        s = $~.offset(0)[1]
       end
-      answer ||= $level5_poems["#{question[0..e]}%WORD%"]
+      if answer.nil?
+        key = question.clone
+        key[s...question.length] = '%WORD%'
+        answer = "#{$level5_poems[key]},#{question[s...question.length]}"
+      end
+
 
     when 6,7
       answer = $level6_poems[question.chars.sort.join]
