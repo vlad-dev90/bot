@@ -1,3 +1,4 @@
+require 'net/http'
 class QuestionController < ApplicationController
   def index
   end
@@ -22,14 +23,12 @@ class QuestionController < ApplicationController
 
     when 3
       splited_question = question.split("\n")
-      # answer = "#{$level3_poems[splited_question[0]]},#{$level3_poems[splited_question[1]]}"
-      answer =  $level3_poems[splited_question[0]] && $level3_poems[splited_question[1]]
+      answer = "#{$level3_poems[splited_question[0]]},#{$level3_poems[splited_question[1]]}"
 
 
     when 4
       splited_question = question.split("\n")
-      # answer = "#{$level3_poems[splited_question[0]]},#{$level3_poems[splited_question[1]]},#{$level3_poems[splited_question[2]]}"
-      answer =  $level3_poems[splited_question[0]] && $level3_poems[splited_question[1]] && $level3_poems[splited_question[2]]
+      answer = "#{$level3_poems[splited_question[0]]},#{$level3_poems[splited_question[1]]},#{$level3_poems[splited_question[2]]}"
 
     when 5
       question.gsub!(/[\t ]/, '')
@@ -46,8 +45,7 @@ class QuestionController < ApplicationController
       answer ||= $level5_poems["#{question[0..e]}%WORD%"]
 
     when 6,7
-      identifier = question.chars.sort.join
-      answer = $level6_poems[identifier]
+      answer = $level6_poems[question.chars.sort.join]
 
     when 8
       identifier = question.chars
